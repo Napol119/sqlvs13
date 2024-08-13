@@ -1,0 +1,25 @@
+Imports System.Data.SqlClient
+
+Public Class FormReport
+    Private connectionstring As String = "Server=lab247ac\DB1101171;Database=dbsutstore;Integrated Security=True;"
+    Dim sqlconnection As New SqlConnection(connectionstring)
+    Private Sub FormReport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.ReportViewer1.Clear()
+
+        Dim sqlDataAdapter = New SqlDataAdapter("SELECT * FROM BestSellerProducts", connectionstring)
+        Dim dataSet As DataSet = New DataSet()
+        sqlDataAdapter.Fill(dataSet)
+
+        Dim rprtDS1 = New ReportDataSource("BestSellerDataSet", dataSet.Tables.Item(0))
+        ReportViewer1.LocalReport.DataSource.Add(rprtDS1)
+
+        Dim asapterProduct = New SqlDataAdapter("SELECT * FROM OrderDetailsView", connectionstring)
+        Dim dsProduct As DataSet = New DataSet()
+        adapterProduct.Fill(dsProduct)
+
+        Dim rprtDS2 = New ReportDataSource("OrderDetailsViewDataSet", dsProduct.Tables.Item(0))
+        ReportViewer1.LocalReport.DataSource.Add(rprtDS2)
+        Me.ReportView1.RefreshReport()
+
+    End Sub
+End Class
